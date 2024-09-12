@@ -1,0 +1,44 @@
+nav {
+  background-color: #f8f9fa;
+  padding: 1rem;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: space-around;
+}
+
+li {
+  display: inline;
+}
+
+a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+a:hover {
+  background-color: #e9ecef;
+}
+
+a.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.logout-btn {
+  background-color: #d3d3d3;
+}
+
+.logout-btn:hover {
+    background-color: #c23616;
+  }
+  

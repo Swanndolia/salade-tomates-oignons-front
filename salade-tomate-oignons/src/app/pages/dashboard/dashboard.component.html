@@ -1,0 +1,11 @@
+<div class="recipe-container">
+  @for (recipe of recipes; track recipe) {
+    <app-recipe-card [recipe]="recipe"></app-recipe-card>
+  }
+</div>
+<!-- TODO: Implement shopping cart functionality
+     - Allow users to add recipes to a weekly meal plan
+     - Generate a grocery shopping list based on selected recipes
+     - Automatically update the "My Fridge" component with purchased items
+     - Use the "My Fridge" inventory to suggest recipes that can be made with available ingredients
+-->

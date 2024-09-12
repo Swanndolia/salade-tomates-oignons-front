@@ -1,0 +1,12 @@
+<div class="recipe-card">
+  <img [src]="recipe.imageUrl" alt="{{ recipe.name }}" class="recipe-image">
+  <div class="recipe-details">
+    <h2>{{ recipe.name }}</h2>
+    <p>{{ recipe.description }}</p>
+    <div class="recipe-meta">
+      <span><i class="fas fa-clock"></i> {{ recipe.cookTime }} mins</span>
+      <span><i class="fas fa-user-friends"></i> {{ recipe.servings }} servings</span>
+    </div>
+    <button class="view-recipe-btn">View Recipe</button>
+  </div>
+</div>

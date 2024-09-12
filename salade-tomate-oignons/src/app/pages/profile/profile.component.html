@@ -1,0 +1,59 @@
+<div class="profile-container" [ngClass]="{'dark-theme': isDarkTheme}">
+  <div class="profile-header">
+    <h1>User Profile</h1>
+  </div>
+  <div class="profile-content">
+    <div class="profile-image">
+      <img src="https://via.placeholder.com/150" alt="Profile Picture">
+    </div>
+    <div class="profile-details">
+      <h2>{{ username }}</h2>
+      <p><strong>Email:</strong> {{ email }}</p>
+      
+      <h3>Dietary Preferences</h3>
+      <div class="dietary-preferences">
+        <label><input type="checkbox" (change)="toggleDietaryPreference('vegetarian')" [checked]="dietaryPreferences.includes('vegetarian')"> Vegetarian</label>
+        <label><input type="checkbox" (change)="toggleDietaryPreference('végétalien')" [checked]="dietaryPreferences.includes('végétalien')"> Végétalien</label>
+        <label><input type="checkbox" (change)="toggleDietaryPreference('gluten-free')" [checked]="dietaryPreferences.includes('gluten-free')"> Gluten-free</label>
+        <label><input type="checkbox" (change)="toggleDietaryPreference('lactose-free')" [checked]="dietaryPreferences.includes('lactose-free')"> Lactose-free</label>
+      </div>
+
+      <h3>Default Servings</h3>
+      <input type="number" [(ngModel)]="defaultServings" min="1" max="10">
+
+      <h3>Theme Preference</h3>
+      <label><input type="checkbox" [(ngModel)]="isDarkTheme" (change)="updateProfile()"> Dark Theme</label>
+
+      <h3>Favorite Ingredients</h3>
+      <div class="favorite-ingredients">
+        <input #newIngredient type="text" placeholder="Add ingredient">
+        <button (click)="addFavoriteIngredient(newIngredient.value); newIngredient.value=''">Add</button>
+        <ul>
+          <li *ngFor="let ingredient of favoriteIngredients">
+            {{ ingredient }}
+            <button (click)="removeFavoriteIngredient(ingredient)">Remove</button>
+          </li>
+        </ul>
+      </div>
+
+      <h3>Excluded Ingredients</h3>
+      <div class="excluded-ingredients">
+        <input #newExcludedIngredient type="text" placeholder="Add excluded ingredient">
+        <button (click)="addExcludedIngredient(newExcludedIngredient.value); newExcludedIngredient.value=''">Add</button>
+        <ul>
+          <li *ngFor="let ingredient of excludedIngredients">
+            {{ ingredient }}
+            <button (click)="removeExcludedIngredient(ingredient)">Remove</button>
+          </li>
+        </ul>
+      </div>
+
+      <h3>Cooking Skill Level</h3>
+      <select [(ngModel)]="cookingSkillLevel">
+        <option value="beginner">Beginner</option>
+        <option value="intermediate">Intermediate</option>
+        <option value="advanced">Advanced</option>
+      </select>
+    </div>
+  </div>
+</div>
