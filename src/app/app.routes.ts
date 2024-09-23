@@ -22,7 +22,7 @@ export const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
-  { path: 'recipe', component: RecipeComponent, canActivate: [authGuard] },
+  { path: 'recipes/:id', component: RecipeComponent, canActivate: [authGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
   { path: 'admin', component: AdminComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: '/home' } // Wildcard route redirects to home

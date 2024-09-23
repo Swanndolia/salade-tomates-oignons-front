@@ -1,1 +1,26 @@
-<p>recipe works!</p>
+@if (recipe) {
+  <div class="recipe-container">
+    <h1>{{ recipe.label }}</h1>
+    <img [src]="recipe.picture" alt="{{ recipe.label }}" class="recipe-image">
+    <div class="recipe-details">
+      <p><strong>Duration:</strong> {{ recipe.duration }} minutes</p>
+      <h2>Instructions:</h2>
+      <ol>
+        @for (step of recipe.instruction.split('\n'); track $index) {
+          <li>{{ step.trim() }}</li>
+        }
+      </ol>
+      <h2>Ingredients:</h2>
+      <ul>
+        @for (ingredient of recipe.recipeIngredientsDto; track ingredient.ingredientDto.id) {
+          <li>
+            {{ ingredient.quantity }} {{ ingredient.ingredientDto.unitLabel }} {{ ingredient.ingredientDto.label }}
+            @if (ingredient.ingredientDto.animalLabel) {
+              ({{ ingredient.ingredientDto.animalLabel }})
+            }
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+}

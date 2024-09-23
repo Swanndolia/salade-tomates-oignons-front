@@ -1,5 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+
+interface Recipe {
+  id: number;
+  label: string;
+  picture: string;
+  duration: number;
+}
 
 @Component({
   selector: 'app-home',
@@ -8,6 +16,8 @@ import { CommonModule } from '@angular/common';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent {
-  // Add any necessary component logic here
+export class HomeComponent{
+
+  constructor(private http: HttpClient) {}
+
 }
