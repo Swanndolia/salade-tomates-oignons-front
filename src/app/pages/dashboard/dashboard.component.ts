@@ -52,7 +52,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   currentView: string = 'recipes';
   searchTerm: string = '';
   searchResults: Ingredient[] = [];
-  fridgeContents: Ingredient[] = [];
+  fridgeContents: Ingredient[] = JSON.parse(localStorage.getItem('fridge') || '[]');
 
   private searchTerms = new Subject<string>();
   private destroy$ = new Subject<void>();
@@ -91,7 +91,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   setupSearchDebounce() {
     this.searchTerms.pipe(
-      debounceTime(300),
+      debounceTime(500),
       distinctUntilChanged(),
       takeUntil(this.destroy$)
     ).subscribe(() => {
@@ -122,10 +122,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   addToFridge(ingredient: Ingredient) {
     if (!this.fridgeContents.some(item => item.id === ingredient.id)) {
       this.fridgeContents.push(ingredient);
+      this.searchResults = this.searchResults.filter(item => item.id !== ingredient.id);
+      localStorage.setItem('fridge', JSON.stringify(this.fridgeContents));
     }
   }
 
   removeFromFridge(ingredient: Ingredient) {
     this.fridgeContents = this.fridgeContents.filter(item => item.id !== ingredient.id);
+    localStorage.setItem('fridge', JSON.stringify(this.fridgeContents));
+    this.searchIngredients();
   }
 }

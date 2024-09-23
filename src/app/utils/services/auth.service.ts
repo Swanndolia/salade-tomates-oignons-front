@@ -7,13 +7,13 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://your-api-url.com'; // Replace with your actual API URL
+  private apiUrl = 'http://localhost:8080/v1/accounts/login'; // Replace with your actual API URL
   isLoggedInSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.hasToken());
 
   constructor(private http: HttpClient, private router: Router) { }
 
   login(username: string, password: string): Observable<any> {
-    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, { username, password }).pipe(
+    return this.http.post<{ token: string }>(`${this.apiUrl}`, { username: username, password: password }).pipe(
       tap(response => {
         if (response && response.token) {
           localStorage.setItem('token', response.token);
@@ -22,11 +22,11 @@ export class AuthService {
         }
       }),
       catchError((error: HttpErrorResponse) => {
-        console.warn('API not reachable, using mock token');
         localStorage.setItem('token', 'mock-token');
         localStorage.setItem('username', username);
         this.isLoggedInSubject.next(true);
-        return of({ token: 'mock-token' });
+        console.error('Error during login:', error);
+        return of({ token: null });
       })
     );
   }
