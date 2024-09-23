@@ -1,46 +1,20 @@
 <div class="view-toggle">
   <label>
-    <input type="radio" name="view" value="fridge" [(ngModel)]="currentView" (change)="onViewChange()">
+    <input type="radio" name="view" value="fridge" [checked]="currentView === 'fridge'"
+      (change)="onViewChange('fridge')">
     <span>Mon frigo</span>
   </label>
   <label>
-    <input type="radio" name="view" value="recipes" [(ngModel)]="currentView" (change)="onViewChange()">
+    <input type="radio" name="view" value="recipes" [checked]="currentView === 'recipes'"
+      (change)="onViewChange('recipes')">
     <span>Mes recettes</span>
   </label>
 </div>
 
 <div class="recipe-container">
   @if (currentView === 'recipes') {
-  @for (recipe of recipes; track recipe.id) {
-  <app-recipe-card [recipe]="recipe"></app-recipe-card>
-  }
+  <app-recipes></app-recipes>
   } @else {
-  <div class="fridge-content">
-    <h2>Mon frigo</h2>
-    <div class="search-bar">
-      <input type="text" [(ngModel)]="searchTerm" (input)="searchIngredients()" placeholder="Rechercher un ingrédient">
-    </div>
-    <ul class="ingredient-list">
-      @for (ingredientDto of searchResults; track ingredientDto.id) {
-      <li>
-        {{ ingredientDto.label }}
-        <input type="number" [(ngModel)]="ingredientDto.quantity" placeholder="Quantité">
-        {{ ingredientDto.unitLabel }}
-        <button (click)="addToFridge(ingredientDto)">Ajouter au frigo</button>
-      </li>
-      }
-    </ul>
-    <h3>Ingrédients dans mon frigo</h3>
-    <ul class="fridge-list">
-      @for (fridgeItem of fridgeContents; track fridgeItem.id) {
-      <li>
-        {{ fridgeItem.label }} -
-        <input type="number" class="quantity-input" [(ngModel)]="fridgeItem.quantity" placeholder="Quantité" (change)="updateFridgeContents()">
-        {{ fridgeItem.unitLabel }}
-        <button (click)="removeFromFridge(fridgeItem)">Retirer</button>
-      </li>
-      }
-    </ul>
-  </div>
+  <app-fridge></app-fridge>
   }
 </div>
