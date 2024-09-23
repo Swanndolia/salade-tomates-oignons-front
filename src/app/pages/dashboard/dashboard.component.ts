@@ -5,11 +5,6 @@ import { RecipeCardComponent } from '../../component/recipe-card/recipe-card.com
 import { HttpClient } from '@angular/common/http';
 import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 
-interface Ingredient {
-  id: number;
-  label: string;
-}
-
 interface IngredientDto {
   id: string;
   label: string;
@@ -22,6 +17,7 @@ interface IngredientDto {
   animalLabel: string;
   unitId: string;
   unitLabel: string;
+  quantity: number;
 }
 
 interface RecipeIngredientDto {
@@ -51,8 +47,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   recipes: Recipe[] = [];
   currentView: string = 'recipes';
   searchTerm: string = '';
-  searchResults: Ingredient[] = [];
-  fridgeContents: Ingredient[] = JSON.parse(localStorage.getItem('fridge') || '[]');
+  searchResults: IngredientDto[] = [];
+  fridgeContents: IngredientDto[] = JSON.parse(localStorage.getItem('fridge') || '[]');
 
   private searchTerms = new Subject<string>();
   private destroy$ = new Subject<void>();
@@ -105,8 +101,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   searchIngredients() {
     if (this.searchTerm.trim() !== '') {
-      this.http.get<{content: Ingredient[]}>(`http://localhost:8080/v1/ingredients/${this.searchTerm}/ingredients`).subscribe({
-        next: (data: {content: Ingredient[]}) => {
+      this.http.get<{content: IngredientDto[]}>(`http://localhost:8080/v1/ingredients/${this.searchTerm}/ingredients`).subscribe({
+        next: (data: {content: IngredientDto[]}) => {
           this.searchResults = data.content;
         },
         error: (error: Error) => {
@@ -119,17 +115,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  addToFridge(ingredient: Ingredient) {
-    if (!this.fridgeContents.some(item => item.id === ingredient.id)) {
-      this.fridgeContents.push(ingredient);
-      this.searchResults = this.searchResults.filter(item => item.id !== ingredient.id);
-      localStorage.setItem('fridge', JSON.stringify(this.fridgeContents));
+  addToFridge(ingredientDto: IngredientDto) {
+    if (!this.fridgeContents.some(item => item.id === ingredientDto.id)) {
+      this.fridgeContents.push(ingredientDto);
+      this.updateFridgeContents();
+      this.searchResults = this.searchResults.filter(item => item.id !== ingredientDto.id);
     }
   }
 
-  removeFromFridge(ingredient: Ingredient) {
-    this.fridgeContents = this.fridgeContents.filter(item => item.id !== ingredient.id);
-    localStorage.setItem('fridge', JSON.stringify(this.fridgeContents));
+  removeFromFridge(ingredientDto: IngredientDto) {
+    this.fridgeContents = this.fridgeContents.filter(item => item.id !== ingredientDto.id);
+    this.updateFridgeContents();
     this.searchIngredients();
+  }
+
+  updateFridgeContents() {
+    localStorage.setItem('fridge', JSON.stringify(this.fridgeContents));
   }
 }
