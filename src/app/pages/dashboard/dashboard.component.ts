@@ -7,7 +7,7 @@ import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 
 interface Ingredient {
   id: number;
-  name: string;
+  label: string;
 }
 
 interface IngredientDto {
@@ -105,9 +105,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   searchIngredients() {
     if (this.searchTerm.trim() !== '') {
-      this.http.get<Ingredient[]>(`http://localhost:8080/v1/ingredients?search=${this.searchTerm}`).subscribe({
-        next: (data: Ingredient[]) => {
-          this.searchResults = data;
+      this.http.get<{content: Ingredient[]}>(`http://localhost:8080/v1/ingredients/${this.searchTerm}/ingredients`).subscribe({
+        next: (data: {content: Ingredient[]}) => {
+          this.searchResults = data.content;
         },
         error: (error: Error) => {
           console.error('Error searching ingredients:', error);

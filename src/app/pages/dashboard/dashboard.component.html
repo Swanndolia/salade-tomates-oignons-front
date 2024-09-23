@@ -23,7 +23,7 @@
       <ul class="ingredient-list">
         @for (ingredient of searchResults; track ingredient.id) {
           <li>
-            {{ ingredient.name }}
+            {{ ingredient.label }}
             <button (click)="addToFridge(ingredient)">Ajouter au frigo</button>
           </li>
         }
@@ -32,7 +32,7 @@
       <ul class="fridge-list">
         @for (fridgeItem of fridgeContents; track fridgeItem.id) {
           <li>
-            {{ fridgeItem.name }}
+            {{ fridgeItem.label }}
             <button (click)="removeFromFridge(fridgeItem)">Retirer</button>
           </li>
         }
