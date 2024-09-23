@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../utils/services/auth.service';
 import { trigger, transition, style, animate } from '@angular/animations';
-
 @Component({
   selector: 'app-login',
   standalone: true,

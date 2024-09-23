@@ -2,39 +2,10 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RecipeCardComponent } from '../../component/recipe-card/recipe-card.component';
-import { HttpClient } from '@angular/common/http';
 import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
-
-interface IngredientDto {
-  id: string;
-  label: string;
-  vegetarian: boolean;
-  vegan: boolean;
-  glutenFree: boolean;
-  lactoseFree: boolean;
-  calorie: number;
-  animalId: string;
-  animalLabel: string;
-  unitId: string;
-  unitLabel: string;
-  quantity: number;
-}
-
-interface RecipeIngredientDto {
-  quantity: number;
-  consumed: boolean;
-  ingredientDto: IngredientDto;
-}
-
-interface Recipe {
-  id: string;
-  label: string;
-  publicRecipe: boolean;
-  instruction: string;
-  duration: number;
-  picture: string;
-  recipeIngredientsDto: RecipeIngredientDto[];
-}
+import { IngredientDto } from '../../utils/models/ingredient';
+import { RecipeDto } from '../../utils/models/recipe';
+import { DashboardService } from '../../utils/services/dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -44,7 +15,7 @@ interface Recipe {
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-  recipes: Recipe[] = [];
+  recipes: RecipeDto[] = [];
   currentView: string = 'recipes';
   searchTerm: string = '';
   searchResults: IngredientDto[] = [];
@@ -53,7 +24,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private searchTerms = new Subject<string>();
   private destroy$ = new Subject<void>();
 
-  constructor(private http: HttpClient) {}
+  constructor(private dashboardService: DashboardService) {}
 
   ngOnInit() {
     this.fetchRecipes();
@@ -66,8 +37,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   fetchRecipes() {
-    this.http.get<{ content: Recipe[] }>('http://localhost:8080/v1/recipes').subscribe({
-      next: (data: { content: Recipe[] }) => {
+    this.dashboardService.fetchRecipes().subscribe({
+      next: (data: { content: RecipeDto[] }) => {
         this.recipes = data.content;
       },
       error: (error: Error) => {
@@ -101,8 +72,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   searchIngredients() {
     if (this.searchTerm.trim() !== '') {
-      this.http.get<{content: IngredientDto[]}>(`http://localhost:8080/v1/ingredients/${this.searchTerm}/ingredients`).subscribe({
-        next: (data: {content: IngredientDto[]}) => {
+      this.dashboardService.searchIngredients(this.searchTerm).subscribe({
+        next: (data: { content: IngredientDto[] }) => {
           this.searchResults = data.content;
         },
         error: (error: Error) => {
@@ -130,6 +101,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   updateFridgeContents() {
-    localStorage.setItem('fridge', JSON.stringify(this.fridgeContents));
+    this.dashboardService.updateFridgeContents(this.fridgeContents);
   }
 }
