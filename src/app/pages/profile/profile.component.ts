@@ -15,8 +15,8 @@ export class ProfileComponent implements OnInit {
   username: string = '';
   email: string = '';
   dietaryPreferences: string[] = [];
-  defaultServings: number = 2;
-  isDarkTheme: boolean = false;
+  defaultServings: number = 4;
+  isDarkTheme: boolean = true;
   favoriteIngredients: string[] = [];
   excludedIngredients: string[] = [];
   cookingSkillLevel: string = 'beginner';
@@ -27,7 +27,7 @@ export class ProfileComponent implements OnInit {
     this.username = localStorage.getItem('username') || '';
     this.email = localStorage.getItem('email') || 'user@example.com';
     this.dietaryPreferences = JSON.parse(localStorage.getItem('dietaryPreferences') || '[]');
-    this.defaultServings = Number(localStorage.getItem('defaultServings')) || 2;
+    this.defaultServings = Number(localStorage.getItem('defaultServings')) || 4;
     this.isDarkTheme = localStorage.getItem('isDarkTheme') === 'true';
     this.favoriteIngredients = JSON.parse(localStorage.getItem('favoriteIngredients') || '[]');
     this.excludedIngredients = JSON.parse(localStorage.getItem('excludedIngredients') || '[]');

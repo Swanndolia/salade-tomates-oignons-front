@@ -13,11 +13,14 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) { }
 
   login(username: string, password: string): Observable<any> {
-    return this.http.post<{ token: string }>(`${this.apiUrl}`, { username: username, password: password }).pipe(
+    return this.http.post<{ [key: string]: string }>(`${this.apiUrl}`, { username: username, password: password }).pipe(
       tap(response => {
-        if (response && response.token) {
-          localStorage.setItem('token', response.token);
-          localStorage.setItem('username', username);
+        if (response) {
+          localStorage.clear();
+          for (const key in response) {
+              localStorage.setItem(key, response[key]);
+          }
+          console.log(localStorage);
           this.isLoggedInSubject.next(true);
         }
       }),
@@ -54,5 +57,3 @@ export class AuthService {
     return localStorage.getItem('token') !== null && localStorage.getItem('token') !== '';
   }
 }
-
-// Note: Make sure to import HttpClientModule in your AppModule or the module where AuthService is used
